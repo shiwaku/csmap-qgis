@@ -1,6 +1,6 @@
 # csmap-qgis
 
-全国の **CS立体図** の XYZ タイル（46 レイヤー）を QGIS に一括で読み込むためのプロジェクトファイルと PyQGIS スクリプトです。
+全国の **CS立体図** の XYZ タイル（46 レイヤー）を QGIS に一括で読み込むためのプロジェクトファイル、レイヤー定義ファイル、PyQGIS スクリプトです。
 
 レイヤー定義は Web 地図 [csmap-on-maplibre](https://github.com/shiwaku/csmap-on-maplibre)（[デモ](https://shiwaku.github.io/csmap-on-maplibre/)）と共通で、そのスタイル定義から生成しています。
 
@@ -41,4 +41,4 @@ python build_layers.py ../csmap-on-maplibre
 
 ## ライセンス
 
-このリポジトリのスクリプトとプロジェクトファイルは [MIT License](LICENSE) です。タイルは各提供元の利用条件に従います。
+このリポジトリのスクリプト、プロジェクトファイル、レイヤー定義ファイルは [MIT License](LICENSE) です。タイルは各提供元の利用条件に従います。
