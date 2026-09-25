@@ -2,8 +2,8 @@
 
 使い方:
   - QGIS の Python コンソールで実行する（エディタでこのファイルを開いて ▶）
-  - またはスタンドアロンで実行して .qgz を書き出す:
-      "C:/Program Files/QGIS 3.34.12/bin/python-qgis-ltr.bat" load_csmap.py csmap.qgz
+  - またはスタンドアロンで実行して .qgz / .qlr を書き出す（拡張子で判定、複数指定可）:
+      "C:/Program Files/QGIS 3.34.12/bin/python-qgis-ltr.bat" load_csmap.py csmap.qgz csmap.qlr
 
 CS_LAYERS は build_layers.py が csmap-on-maplibre のレイヤー定義から生成する。手で編集しないこと。
 """
@@ -14,6 +14,7 @@ from qgis.core import (
     QgsApplication,
     QgsCoordinateReferenceSystem,
     QgsDataSourceUri,
+    QgsLayerDefinition,
     QgsLayerMetadata,
     QgsProject,
     QgsRasterLayer,
@@ -105,17 +106,25 @@ def load(project):
 
     project.setCrs(QgsCoordinateReferenceSystem("EPSG:3857"))
     print(f"CS立体図 {len(CS_LAYERS)} レイヤーを追加しました")
+    return group
 
 
 if QgsApplication.instance() is not None:
     # QGIS の Python コンソールから実行
     load(QgsProject.instance())
 else:
-    out = sys.argv[1] if len(sys.argv) > 1 else "csmap.qgz"
+    outs = sys.argv[1:] or ["csmap.qgz"]
     app = QgsApplication([], False)
     app.initQgis()
     project = QgsProject.instance()
-    load(project)
-    project.write(out)
-    print(f"書き出し: {out}")
+    group = load(project)
+    for out in outs:
+        if out.lower().endswith(".qlr"):
+            # レイヤー定義には CS立体図グループだけを入れる（背景地図は含めない）
+            ok, err = QgsLayerDefinition.exportLayerDefinition(out, [group])
+            if not ok:
+                sys.exit(f"書き出し失敗: {out} {err}")
+        elif not project.write(out):
+            sys.exit(f"書き出し失敗: {out}")
+        print(f"書き出し: {out}")
     app.exitQgis()
