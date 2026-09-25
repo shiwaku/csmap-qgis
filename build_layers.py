@@ -57,7 +57,7 @@ def main():
             href = (re.findall(r"href='([^']*)'", att_html) or [""])[0]
             name = m.group(2)
             if lid.startswith("tokyo-shima-"):
-                name = f"東京都(島しょ地域・{SHIMA[lid[12:14]]})CS立体図"
+                name = name.replace("(島しょ地域)", f"(島しょ地域・{SHIMA[lid[12:14]]})")
             rows.append((lid, name, url, zmax, att, href))
 
     body = "".join(f"    {r!r},\n" for r in rows)
