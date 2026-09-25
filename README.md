@@ -12,7 +12,9 @@
 
 ### 既存のプロジェクトに追加する
 
-QGIS の Python コンソールを開き（プラグイン > Python コンソール）、エディタで [`load_csmap.py`](load_csmap.py) を開いて実行します。
+[`csmap.qlr`](csmap.qlr)（レイヤー定義ファイル）をダウンロードし、QGIS のマップキャンバスかレイヤーパネルにドラッグ＆ドロップします（または レイヤ > レイヤ定義ファイルから追加）。「CS立体図」グループが追加されます。背景地図は含みません。
+
+スクリプトで追加する場合は、QGIS の Python コンソールを開き（プラグイン > Python コンソール）、エディタで [`load_csmap.py`](load_csmap.py) を開いて実行します。
 
 QGIS 3.34 と 4.0 で動作を確認しています。
 
@@ -31,8 +33,8 @@ python build_layers.py
 #    ローカルのチェックアウトを使う場合
 python build_layers.py ../csmap-on-maplibre
 
-# 2. csmap.qgz を書き出す
-"C:/Program Files/QGIS 3.34.12/bin/python-qgis-ltr.bat" load_csmap.py csmap.qgz
+# 2. csmap.qgz と csmap.qlr を書き出す
+"C:/Program Files/QGIS 3.34.12/bin/python-qgis-ltr.bat" load_csmap.py csmap.qgz csmap.qlr
 ```
 
 `build_layers.py` は、レイヤーの順序と表示名を `src/layers.ts`、タイル URL と出典を `public/style/pale.json` から取ります。最大ズームは、ソースの `maxzoom`、[csmap-tiles](https://github.com/shiwaku/csmap-tiles) の `datasets.json`、スクリプト内の `ZMAX_FALLBACK` の順に決まります。どれにも無いレイヤーがあるとエラーで止まるので、実際のタイルで最大ズームを確かめて `ZMAX_FALLBACK` に追加してください。
